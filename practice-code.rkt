@@ -1,0 +1,18 @@
+#lang racket
+
+(define (lst-length lst)
+  (define (iter lst len)
+    (cond
+      [(empty? lst) len]
+      [else
+       (iter (rest lst) (+ len 1))]))
+  (iter lst 0))
+
+
+;;(lst-length [string->list (file->string fileName)])
+
+
+
+(string-append "Look, a space:::::" (string #\ ) ":::::")
+
+(equal? #\space (string->char " "))
