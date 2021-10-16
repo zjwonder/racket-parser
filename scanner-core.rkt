@@ -67,10 +67,10 @@
 ;; takes in char list and returns the next whole token
 ;; token terminates at any non-alphanumeric character
 
-(trace-define (alpha-tokenize current-token input-stack)
+(define (alpha-tokenize current-token input-stack)
   (cond
-    [(not (and (char-alphabetic? (first input-stack)) (char-numeric? (first input-stack))))
-     current-token input-stack]
+    [(not (or (char-alphabetic? (first input-stack)) (char-numeric? (first input-stack))))
+     (cons current-token input-stack)]
     [else
      (if (char? current-token)
          (alpha-tokenize (string current-token (first input-stack)) (rest input-stack))
@@ -82,7 +82,7 @@
 ;; takes in char list and returns the next whole token
 ;; token terminates at any non-numeric and non-decimal character
 
-(trace-define (num-tokenize current-token input-stack)
+(define (num-tokenize current-token input-stack)
   (cond
     [(not (digit? (first input-stack)))
      input-stack]
@@ -98,7 +98,7 @@
 ;; execution ends when a lexical error is located
 ;; initial parameters: list of chars, empty list, 1st line number
 
-(trace-define (scan-next raw-input-stack output-stack line)
+(define (scan-next raw-input-stack output-stack line)
 
   ; save a bit of typing later
   (define current-char (first raw-input-stack))
@@ -109,8 +109,8 @@
     ; check for '$$' (end-of-file)
     [(eof? current-char)
      (if (eof? (first input-stack))
-         output-stack
-         null)]
+         (reverse output-stack)
+         (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
 
     ; check for space or return
     [(space? current-char)
@@ -118,29 +118,29 @@
 
     ; check for newline
     [(newline? current-char)
-     (scan-next input-stack (cons output-stack "newline") (+ line 1))]
+     (scan-next input-stack (cons "newline" output-stack) (+ line 1))]
 
     ; check for '+' or '-' (addition or subtraction operator)
     [(add-op? current-char)
-     (scan-next input-stack (cons output-stack "add-op") line)]
+     (scan-next input-stack (cons "add-op" output-stack) line)]
 
     ; check for '/' or '*' (multiplication or division operator)
     [(mult-op? current-char)
-     (scan-next input-stack (cons output-stack "mult-op") line)]
+     (scan-next input-stack (cons "mult-op" output-stack) line)]
 
     ; check for '(' (left parenthesis)
     [(left-parens? current-char)
-     (scan-next input-stack (cons output-stack "left-parens") line)]
+     (scan-next input-stack (cons "left-parens" output-stack) line)]
 
     ; check for ')' (right parenthesis)
     [(right-parens? current-char)
-     (scan-next input-stack (cons output-stack "right-parens") line)]
+     (scan-next input-stack (cons "right-parens" output-stack) line)]
 
     ; check for ':' (left assignment char)
     [(left-assign? current-char)
      (if (right-assign? (first input-stack))
-         (scan-next input-stack (cons output-stack "assign") line)
-         (printf "Lexical error on line ~a. Missing assignment symbol.\n" line))]
+         (scan-next (rest input-stack) (cons "assign" output-stack) line)
+         (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
 
     ; check for alphabetic characters
     [(char-alphabetic? current-char)
@@ -148,15 +148,15 @@
      (define alpha-token (first alpha-result))
      (define alpha-rest (rest alpha-result))
      (if (or (equal? alpha-token "read") (equal? alpha-token "write"))
-         (scan-next alpha-rest (cons output-stack alpha-token) line)
-         (scan-next alpha-rest (cons output-stack "id") line))]
+         (scan-next alpha-rest (cons alpha-token output-stack) line)
+         (scan-next alpha-rest (cons "id" output-stack) line))]
 
     ; check for numeric characters
     [(digit? current-char)
-     (scan-next (num-tokenize current-char input-stack) (cons output-stack "num") line)]
+     (scan-next (num-tokenize current-char input-stack) (cons "num" output-stack) line)]
       
     [else
-     (printf "Lexical error on line ~a. Unexpected symbol: ~a\n" line current-char)]))
+     (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)]))
 
 
 
@@ -171,9 +171,9 @@
 
 
 
-(scanner "Input01.txt")
-;(scanner "Input02.txt")
-;(scanner "Input03.txt")
-;(scanner "Input04.txt")
-;(scanner "Input05.txt")
-;(scanner "Input06.txt")
+(scanner "sample-inputs/Input01.txt")
+(scanner "sample-inputs/Input02.txt")
+(scanner "sample-inputs/Input03.txt")
+(scanner "sample-inputs/Input04.txt")
+(scanner "sample-inputs/Input05.txt")
+(scanner "sample-inputs/Input06.txt")

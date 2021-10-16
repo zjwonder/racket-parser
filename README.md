@@ -13,7 +13,9 @@ Similarly, the parser will print a message to the console indicating the line nu
 
 2) Open *parser-core.rkt* and click the "Run" button. This will execute parsing on all of the provided input files.
 
-3) To parse a different file, add a line to the bottom of the application like so, and click "Run":
+3) To parse a different file, first copy the file to the parent directory of the project. (this should be the same folder in which *parser.rkt* is located.) 
+
+4) Next, add a line to the bottom of the application as below, and click "Run":
 
 ```
 (parser "different-file.txt")
