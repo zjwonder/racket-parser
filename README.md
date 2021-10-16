@@ -53,20 +53,22 @@ Great question!
 
 There are a few steps to the logic of the application, as you will see below.
 
-### 1) Lexical analysis
+### 1. Lexical analysis
 
 This is performed by the functions in *scanner-core.rkt*. This package first defines functions for matching char inputs to recognized symbols:
 
-scanner1
+![match-fns](readme-img/scanner1.png)
 
 There are also special recursive functions for tokenizing numeric and alphabetic symbols, since those symbols can vary in length:
 
-scanner2
+![special-tokens](readme-img/scanner2.png)
 
 These functions are called by the main scanner function as it recursively iterates through the entire input list.
 
-scanner3
+![scan-next-fn](readme-img/scanner3.png)
 
-To execute this logic correctly, we call *scanner* with the input file name as a parameter. This function breaks down every character in the file into a list of chars, then passes the list to the above function:
+To execute this logic, we call *scanner* with the input file name as a parameter. This function breaks down every character in the file into a list of chars, then passes the list to the above function:
 
-scanner0
+![scanner-fn](readme-img/scanner0.png)
+
+### 2. Syntactic Analysis
