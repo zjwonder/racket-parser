@@ -1,7 +1,6 @@
 #lang racket
-(require racket/trace)
 
-
+(provide (all-defined-out))
 
 ;; each type of recognized symbol has a comparison fn below
 ;; except for alphabetic chars which have a built-in fn built in
@@ -55,10 +54,14 @@
     [(equal? sym #\=) true]
     [else false]))
 
-(define (digit? sym)
+(define (numeric? sym)
   (cond
-    [(char-numeric? sym) true]
-    [(equal? sym #\.) true]
+    [(regexp-match? #rx"([0-9]|\\.)" (string sym)) true]
+    [else false]))
+
+(define (alphabetic? sym)
+  (cond
+    [(regexp-match? #rx"([A-Z]|[a-z])" (string sym)) true]
     [else false]))
 
 
@@ -69,12 +72,16 @@
 
 (define (alpha-tokenize current-token input-stack)
   (cond
-    [(not (or (char-alphabetic? (first input-stack)) (char-numeric? (first input-stack))))
+    [(not (or (alphabetic? (first input-stack)) (integer? (first input-stack))))
      (cons current-token input-stack)]
     [else
      (if (char? current-token)
-         (alpha-tokenize (string current-token (first input-stack)) (rest input-stack))
-         (alpha-tokenize (string-append current-token (string (first input-stack))) (rest input-stack)))]))
+         (alpha-tokenize
+          (string (char-downcase current-token) (char-downcase (first input-stack)))
+          (rest input-stack))
+         (alpha-tokenize
+          (string-append current-token (string (char-downcase (first input-stack))))
+          (rest input-stack)))]))
 
 
 
@@ -82,14 +89,22 @@
 ;; takes in char list and returns the next whole token
 ;; token terminates at any non-numeric and non-decimal character
 
-(define (num-tokenize current-token input-stack)
+(define (num-tokenize current-token input-stack line)
   (cond
-    [(not (digit? (first input-stack)))
+    [(alphabetic? (first input-stack))
+     (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line (first input-stack))]
+    [(not (numeric? (first input-stack)))
      input-stack]
     [else
      (if (char? current-token)
-         (num-tokenize (string current-token (first input-stack)) (rest input-stack))
-         (num-tokenize (string-append current-token (string (first input-stack))) (rest input-stack)))]))
+         (num-tokenize
+          (string current-token (first input-stack))
+          (rest input-stack)
+          line)
+         (num-tokenize
+          (string-append current-token (string (first input-stack)))
+          (rest input-stack)
+          line))]))
 
 
 
@@ -109,8 +124,8 @@
     ; check for '$$' (end-of-file)
     [(eof? current-char)
      (if (eof? (first input-stack))
-         (reverse output-stack)
-         (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
+         (reverse (cons "$$" output-stack))
+         (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
 
     ; check for space or return
     [(space? current-char)
@@ -152,8 +167,8 @@
          (scan-next alpha-rest (cons "id" output-stack) line))]
 
     ; check for numeric characters
-    [(digit? current-char)
-     (scan-next (num-tokenize current-char input-stack) (cons "num" output-stack) line)]
+    [(numeric? current-char)
+     (scan-next (num-tokenize current-char input-stack line) (cons "num" output-stack) line)]
       
     [else
      (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)]))
@@ -168,12 +183,3 @@
     [else
      (displayln file-name)
      (scan-next [string->list (file->string file-name)] empty 1)]))
-
-
-
-(scanner "sample-inputs/Input01.txt")
-(scanner "sample-inputs/Input02.txt")
-(scanner "sample-inputs/Input03.txt")
-(scanner "sample-inputs/Input04.txt")
-(scanner "sample-inputs/Input05.txt")
-(scanner "sample-inputs/Input06.txt")

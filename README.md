@@ -1,10 +1,6 @@
 # Racket Parser
 
-This project is designed to scan and parse scripts written using a custom calculator grammar. It will not produce a parse tree; however, it will assess the lexical and syntactic correctness.
-
-If a lexical error is detected, the scanner will stop analysis and print a message to the console indicating the line number and symbol that caused the error.
-
-Similarly, the parser will print a message to the console indicating the line number and cause of the error, if one is encountered.
+This project is designed to scan and parse scripts written using a custom calculator grammar. It will not produce a parse tree; however, it will assess the lexical and syntactic correctness of a given text file.
 
 
 ## User Guide
@@ -22,6 +18,28 @@ Similarly, the parser will print a message to the console indicating the line nu
 ```
 
 5) Click "Run". It should execute scanning and parsing on your file and print the result in the console.
+
+### Pragmas and Rules
+
+If a lexical error is detected, the scanner will stop analysis and print a message to the console indicating the line number and symbol that caused the error.
+
+Similarly, the parser will print a message to the console indicating the location and cause of the syntactic error.
+
+Spaces around variables are necessary in order for the scanner to tell them apart from other tokens.
+
+```
+READa ; This is a valid variable name.
+READ a ; This is a valid statement.
+```
+
+The scanner is case-insensitive. A variable name *MyVariable* is equivalent to *myvariable*. This was done to minimize risk of capitalization mistakes, particularly with regard to *read* and *write* commands.
+
+```myvariable === MyVariable ; If our language provided for deep equality comparisons, it would find these to be the same object.```
+
+Variable names must began with an alphabetic character (A-Z), but they may contain numbers (0-9).
+
+Numbers can include decimal points. Neither the scanner nor the parser will raise issue if a number has multiple decimal points. Logic to catch this error could (and maybe should) be implemented in a semantic analyzer.
+
 
 ## LL1 Grammar Rules
 
