@@ -9,18 +9,19 @@ Similarly, the parser will print a message to the console indicating the line nu
 
 ## User Guide
 
-1) Pull down the entire repository. All files you need will already be in the correct directory.
+1) Clone the repository to your local machine.
 
-2) Open *parser.rkt* and click the "Run" button. This will execute parsing on all of the provided input files.
+2) Open *parser.rkt* in DrRacket and click the "Run" button. This will execute parsing on all of the provided input files.
 
 3) To parse a different file, first copy the file to the parent directory of the project. (this should be the same folder in which *parser.rkt* is located.) 
 
-4) Next, add a line to the bottom of the application as below, and click "Run":
+4) Next, add a line to the bottom of the application as below:
 
 ```
 (parser "different-file.txt")
 ```
 
+5) Click "Run". It should execute scanning and parsing on your file and print the result in the console.
 
 ## LL1 Grammar Rules
 
