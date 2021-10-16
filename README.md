@@ -11,7 +11,7 @@ Similarly, the parser will print a message to the console indicating the line nu
 
 1) Pull down the entire repository. All files you need will already be in the correct directory.
 
-2) Open *parser-core.rkt* and click the "Run" button. This will execute parsing on all of the provided input files.
+2) Open *parser.rkt* and click the "Run" button. This will execute parsing on all of the provided input files.
 
 3) To parse a different file, first copy the file to the parent directory of the project. (this should be the same folder in which *parser.rkt* is located.) 
 
