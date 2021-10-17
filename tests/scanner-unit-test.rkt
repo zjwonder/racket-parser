@@ -1,6 +1,6 @@
 #lang racket
 
-(require rackunit "scanner-core.rkt")
+(require rackunit "../scanner-core.rkt")
 
 (check-equal?
  (scanner "sample-inputs/Input01.txt")
@@ -33,7 +33,7 @@
   "right-parens"
   "right-parens"
   "newline"
-  "$$"))
+  "eof"))
 
 (check-equal?
  (scanner "sample-inputs/Input02.txt")
@@ -67,7 +67,7 @@
    "right-parens"
    "right-parens"
    "newline"
-   "$$"))
+   "eof"))
 
 (check-equal?
  (scanner "sample-inputs/Input03.txt")
@@ -105,7 +105,7 @@
   "right-parens"
   "right-parens"
   "newline"
-  "$$"))
+  "eof"))
 
 (check-equal?
  (scanner "sample-inputs/Input04.txt")
@@ -116,7 +116,7 @@
   "id"
   "newline"
   "id"
-  "assign"
+  "assign-op"
   "id"
   "add-op"
   "id"
@@ -130,7 +130,7 @@
   "write"
   "id"
   "newline"
-  "$$"))
+  "eof"))
 
 (check-equal?
  (scanner "sample-inputs/Input05.txt")
@@ -141,7 +141,7 @@
   "id"
   "newline"
   "id"
-  "assign"
+  "assign-op"
   "id"
   "add-op"
   "id"
@@ -155,7 +155,7 @@
   "write"
   "id"
   "newline"
-  "$$"))
+  "eof"))
 
 (check-equal? (scanner "sample-inputs/Input06.txt") (void))
 

@@ -1,6 +1,6 @@
 #lang racket
 
-(require racket/match)
+(require racket/match "parser.rkt")
 
 (define (lst-length lst)
   (define (iter lst len)
@@ -24,3 +24,4 @@
 (char-downcase #\a)
 (char-upcase #\a)
 (char-upcase #\A)
+

@@ -115,63 +115,67 @@
 
 (define (scan-next raw-input-stack output-stack line)
 
-  ; save a bit of typing later
-  (define current-char (first raw-input-stack))
-  (define input-stack (rest raw-input-stack))
+  ; save a bit of typing later with local variables
+  (let (
+    [current-char (first raw-input-stack)]
+    [input-stack (rest raw-input-stack)])
+    
+    (cond
 
-  (cond
+      ; check for empty file
+      [(and (empty? current-char) (empty? input-stack))]
 
-    ; check for '$$' (end-of-file)
-    [(eof? current-char)
-     (if (eof? (first input-stack))
-         (reverse (cons "$$" output-stack))
-         (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
+      ; check for '$$' (end-of-file)
+      [(eof? current-char)
+      (if (eof? (first input-stack))
+          (reverse (cons "eof" output-stack))
+          (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
 
-    ; check for space or return
-    [(space? current-char)
-     (scan-next input-stack output-stack line)]
+      ; check for space or return
+      [(space? current-char)
+      (scan-next input-stack output-stack line)]
 
-    ; check for newline
-    [(newline? current-char)
-     (scan-next input-stack (cons "newline" output-stack) (+ line 1))]
+      ; check for newline
+      [(newline? current-char)
+      (scan-next input-stack (cons "newline" output-stack) (+ line 1))]
 
-    ; check for '+' or '-' (addition or subtraction operator)
-    [(add-op? current-char)
-     (scan-next input-stack (cons "add-op" output-stack) line)]
+      ; check for '+' or '-' (addition or subtraction operator)
+      [(add-op? current-char)
+      (scan-next input-stack (cons "add-op" output-stack) line)]
 
-    ; check for '/' or '*' (multiplication or division operator)
-    [(mult-op? current-char)
-     (scan-next input-stack (cons "mult-op" output-stack) line)]
+      ; check for '/' or '*' (multiplication or division operator)
+      [(mult-op? current-char)
+      (scan-next input-stack (cons "mult-op" output-stack) line)]
 
-    ; check for '(' (left parenthesis)
-    [(left-parens? current-char)
-     (scan-next input-stack (cons "left-parens" output-stack) line)]
+      ; check for '(' (left parenthesis)
+      [(left-parens? current-char)
+      (scan-next input-stack (cons "left-parens" output-stack) line)]
 
-    ; check for ')' (right parenthesis)
-    [(right-parens? current-char)
-     (scan-next input-stack (cons "right-parens" output-stack) line)]
+      ; check for ')' (right parenthesis)
+      [(right-parens? current-char)
+      (scan-next input-stack (cons "right-parens" output-stack) line)]
 
-    ; check for ':' (left assignment char)
-    [(left-assign? current-char)
-     (if (right-assign? (first input-stack))
-         (scan-next (rest input-stack) (cons "assign" output-stack) line)
-         (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
+      ; check for ':' (left assignment char)
+      [(left-assign? current-char)
+      (if (right-assign? (first input-stack))
+          (scan-next (rest input-stack) (cons "assign-op" output-stack) line)
+          (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
 
-    ; check for alphabetic characters
-    [(char-alphabetic? current-char)
-     (define alpha-result (alpha-tokenize current-char input-stack))
-     (define alpha-token (first alpha-result))
-     (define alpha-rest (rest alpha-result))
-     (if (or (equal? alpha-token "read") (equal? alpha-token "write"))
-         (scan-next alpha-rest (cons alpha-token output-stack) line)
-         (scan-next alpha-rest (cons "id" output-stack) line))]
+      ; check for alphabetic characters
+      [(char-alphabetic? current-char)
+      (define alpha-result (alpha-tokenize current-char input-stack))
+      (define alpha-token (first alpha-result))
+      (define alpha-rest (rest alpha-result))
+      (if (or (equal? alpha-token "read") (equal? alpha-token "write"))
+          (scan-next alpha-rest (cons alpha-token output-stack) line)
+          (scan-next alpha-rest (cons "id" output-stack) line))]
 
-    ; check for numeric characters
-    [(numeric? current-char)
-     (scan-next (num-tokenize current-char input-stack line) (cons "num" output-stack) line)]
-      
-    [else
-     (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)]))
+      ; check for numeric characters
+      [(numeric? current-char)
+      (scan-next (num-tokenize current-char input-stack line) (cons "num" output-stack) line)]
+        
+      [else
+      (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)])))
 
 
 

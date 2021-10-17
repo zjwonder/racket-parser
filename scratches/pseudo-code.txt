@@ -1,0 +1,55 @@
+
+/// Parser pseudo-code ///
+
+The below logic was pulled from page 66 of
+
+Programming Language Pragmatics (4e)
+written by Michael L. Scott
+
+
+
+state = 0 . . number of states
+token = 0 . . number of tokens
+scan tab : array [char, state] of record
+	action : (move, recognize, error)
+	new state : state
+token tab : array [state] of token   ;; what to recognize
+keyword tab : set of record
+	k image : string
+	k token : token
+
+;; these three tables are created by a scanner generator tool
+tok : token
+cur char : char
+remembered chars : list of char
+repeat
+	cur state : state := start state
+	image : string := null
+	remembered state : state := 0 ;; none
+	loop
+		read cur char
+		case scan tab[cur char, cur state].action
+		move:
+			if token tab[cur state] = 0
+				;; this could be a final state
+				remembered state := cur state
+				remembered chars :=
+			add cur char to remembered chars
+			cur state := scan tab[cur char, cur state].new state
+		recognize:
+			tok := token tab[cur state]
+			unread cur char ; push back into input stream
+			exit inner loop
+		error:
+			if remembered state = 0
+			tok := token tab[remembered state]
+			unread remembered chars
+			remove remembered chars from image
+			exit inner loop
+			;; else print error message and recover; probably start over
+	append cur char to image
+	;; end inner loop
+until tok does not contain {white space, comment}
+look image up in keyword tab and replace tok with appropriate keyword if found
+return (tok, image)
+

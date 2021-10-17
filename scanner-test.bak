@@ -1,8 +1,0 @@
-#lang racket
-
-(require rackunit "scanner-core.rkt")
-
-
-(check-equal?
- (scan-next '(#\r #\e #\a #\d #\A #\$ #\$) empty 1)
- '("read" "id"))

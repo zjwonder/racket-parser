@@ -46,19 +46,19 @@ Numbers can include decimal points. Neither the scanner nor the parser will rais
 This is the grammar set that the parser was built on.
 
 ```
-program −→ stmt list $$
+program −→ stmt-list $$
 
-stmt list −→ stmt stmt list | ε
+stmt list −→ stmt stmt-list | ε
 
 stmt −→ id := expr | read id | write expr
 
-expr −→ term term tail
+expr −→ term term-tail
 
-term tail −→ add op term term tail | ε
+term tail −→ add-op term term-tail | ε
 
-term −→ factor factor tail
+term −→ factor factor-tail
 
-factor tail −→ mult op factor factor tail | ε
+factor tail −→ mult-op factor factor-tail | ε
 
 factor −→ ( expr ) | id | number
 

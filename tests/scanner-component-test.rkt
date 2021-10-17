@@ -1,6 +1,6 @@
 #lang racket
 
-(require rackunit "scanner-core.rkt")
+(require rackunit "../scanner-core.rkt")
 
 (check-equal? (alpha-tokenize #\A '(#\b #\C #\. #\space)) (cons "abc" '(#\. #\space)))
 (check-equal? (alpha-tokenize #\r '(#\e #\a #\d #\space)) '("read" #\space))
