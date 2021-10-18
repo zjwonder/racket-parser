@@ -1,6 +1,7 @@
 # Racket Parser
 
 Zachary Halderwood | 12368443 | zjuvz6@mail.umkc.edu
+
 University of Missouri - Kansas City | CS441 | Fall 2021
 
 This project is designed to scan and parse scripts written using a custom calculator grammar. It will not produce a parse tree; however, it will assess the lexical and syntactic correctness of a given text file.
