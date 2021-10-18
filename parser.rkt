@@ -123,7 +123,9 @@
 
 (define (parser file-name)
   (let ([input (scanner file-name)])
-    (stmt-list input 1)))
+    (if (equal? (first input) "error")
+      (second input)
+      (stmt-list input 1))))
 
 
 (displayln (parser "sample-inputs/Input01.txt"))

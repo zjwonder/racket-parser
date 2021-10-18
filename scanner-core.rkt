@@ -66,6 +66,15 @@
 
 
 
+(define (lexical-error curr-char line)
+  (list 
+    "error" 
+    (string-append "Lexical error on line "
+      (~v line) ". Unexpected symbol: {" 
+      (string curr-char) "}\n")))
+
+
+
 ;; alphabetic id tokenizer
 ;; takes in char list and returns the next whole token
 ;; token terminates at any non-alphanumeric character
@@ -92,7 +101,7 @@
 (define (num-tokenize current-token input-stack line)
   (cond
     [(alphabetic? (first input-stack))
-     (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line (first input-stack))]
+     (lexical-error (first input-stack) line)]
     [(not (numeric? (first input-stack)))
      input-stack]
     [else
@@ -129,7 +138,7 @@
       [(eof? current-char)
       (if (eof? (first input-stack))
           (reverse (cons "eof" output-stack))
-          (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
+          (lexical-error current-char line))]
 
       ; check for space or return
       [(space? current-char)
@@ -159,7 +168,7 @@
       [(left-assign? current-char)
       (if (right-assign? (first input-stack))
           (scan-next (rest input-stack) (cons "assign-op" output-stack) line)
-          (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
+          (lexical-error current-char line))]
 
       ; check for alphabetic characters
       [(char-alphabetic? current-char)
@@ -175,7 +184,7 @@
       (scan-next (num-tokenize current-char input-stack line) (cons "num" output-stack) line)]
         
       [else
-      (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)])))
+      (lexical-error current-char line)])))
 
 
 

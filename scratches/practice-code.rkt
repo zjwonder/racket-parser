@@ -1,6 +1,6 @@
 #lang racket
 
-(require racket/match "parser.rkt")
+(require racket/match)
 
 (define (lst-length lst)
   (define (iter lst len)
@@ -25,3 +25,4 @@
 (char-upcase #\a)
 (char-upcase #\A)
 
+(string-append "Lexical error on line " (~v 2) ". Unexpected symbol: {" "banana" "}\n")
