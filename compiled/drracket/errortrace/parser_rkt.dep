@@ -1,0 +1,1 @@
+("8.2" ta6nt ("e2c29867563d2bccf15ac06343c5bc9428d600bd" . "7d78f4020d41dbfed0302e290dd27050cf10d656") #"C:\\Users\\zju02\\Repos\\cs441\\racket-parser\\scanner-core.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

@@ -159,7 +159,7 @@
       [(left-assign? current-char)
       (if (right-assign? (first input-stack))
           (scan-next (rest input-stack) (cons "assign-op" output-stack) line)
-          (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
+          (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char))]
 
       ; check for alphabetic characters
       [(char-alphabetic? current-char)
@@ -175,7 +175,7 @@
       (scan-next (num-tokenize current-char input-stack line) (cons "num" output-stack) line)]
         
       [else
-      (printf "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)])))
+      (error "Lexical error on line ~a. Unexpected symbol: {~a}\n" line current-char)])))
 
 
 
