@@ -1,6 +1,6 @@
 # Racket Parser
 
-Zachary Halderwood | 12368443 | zjuvz6@mail.umkc.edu
+Zachary Underwood | 12368443 | zjuvz6@mail.umkc.edu
 
 University of Missouri - Kansas City | CS441 | Fall 2021
 
